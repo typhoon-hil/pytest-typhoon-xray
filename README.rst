@@ -10,8 +10,8 @@ pytest-tytest
     :target: https://pypi.org/project/pytest-typhoon-xray
     :alt: Python versions
 
-.. image:: https://travis-ci.org/mbranko/pytest-typhoon-xray.svg?branch=master
-    :target: https://travis-ci.org/mbranko/pytest-typhoon-xray
+.. image:: https://www.travis-ci.org/typhoon-hil/pytest-typhoon-xray.svg?branch=master
+    :target: https://travis-ci.org/typhoon-hil/pytest-typhoon-xray
     :alt: See Build Status on Travis CI
 
 Typhoon HIL pytest integration with Jira and Xray
