@@ -86,7 +86,7 @@ def pytest_configure(config):
 
     Settings.XRAY_PLAN_KEY = config.getoption('xray_plan_key')
     Settings.XRAY_FAIL_SILENTLY = bool(config.getoption('xray_fail_silently'))
-    Settings.ALLURE_URL = config.getoption('allure_url')
+    Settings.WEB_URL = config.getoption('web_url')
 
     # initialize secret params
     secrets = config.getoption('secrets')
@@ -133,8 +133,8 @@ def pytest_terminal_summary(terminalreporter):
             test['comment']
         result['tests'].append(test)
     new_issue = send_test_results(result)
-    if Settings.ALLURE_URL:
-        add_remote_link(new_issue['id'], Settings.ALLURE_URL, 'Allure report')
+    if Settings.WEB_URL:
+        add_remote_link(new_issue['id'], Settings.WEB_URL, 'Web report')
 
 
 def pytest_sessionfinish(session):
