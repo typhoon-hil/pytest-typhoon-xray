@@ -91,7 +91,7 @@ def pytest_configure(config):
     # initialize secret params
     secrets = config.getoption('secrets')
     Settings.XRAY_HOST = read_or_get(
-        secrets, 'XRAY_HOST', 'https://xray.cloud.xpand-it.com')
+        secrets, 'XRAY_HOST', 'https://xray.cloud.getxray.app')
     Settings.XRAY_CLIENT_ID = read_or_get(secrets, 'XRAY_CLIENT_ID', '')
     Settings.XRAY_CLIENT_SECRET = read_or_get(
         secrets, 'XRAY_CLIENT_SECRET', '')

@@ -53,7 +53,7 @@ Credentials for Jira and Xray
 Put credentials needed to access Jira and Xray in environment variables or a
 file.
 
-* `XRAY_HOST`: Xray URL, defaults to `https://xray.cloud.xpand-it.com`
+* `XRAY_HOST`: Xray URL, defaults to `https://xray.cloud.getxray.app`
 * `XRAY_CLIENT_ID`: Client ID of your Xray API key
 * `XRAY_CLIENT_SECRET`: Client secret of your Xray API key
 * `JIRA_HOST`: Your Jira host, probably `https://mycompany.atlassian.net`
