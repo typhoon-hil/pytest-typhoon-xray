@@ -9,7 +9,7 @@ from .exceptions import XrayAuthError, XraySubmissionError, JiraError
 
 def to_xray_timestamp(ts):
     local_tz = get_localzone()
-    aware_ts = local_tz.localize(ts)
+    aware_ts = ts.replace(tzinfo=local_tz)
     text = aware_ts.strftime('%Y-%m-%dT%H:%M:%S%z')
     return text[:-2] + ':' + text[-2:]
 
