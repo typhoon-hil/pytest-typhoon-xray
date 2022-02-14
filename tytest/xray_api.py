@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+from json import JSONDecodeError
+
 import requests
 from tzlocal import get_localzone
 from .runtime_settings import Settings
@@ -28,13 +30,24 @@ def authenticate_xray():
 
 
 def send_test_results(test_results):
-    headers = authenticate_xray()
-    r = requests.post(f'{Settings.XRAY_HOST}/api/v1/import/execution',
-                      headers=headers, json=test_results)
+    if Settings.XRAY_SERVER:
+        headers = {
+            'Authorization': 'Bearer {Settings.JIRA_TOKEN}',
+            'Content-type': 'application/json'
+        }
+        r = requests.post(f'{Settings.XRAY_HOST}/rest/raven/1.0/import/execution',
+                          headers=headers, json=test_results)
+    else:
+        headers = authenticate_xray()
+        r = requests.post(f'{Settings.XRAY_HOST}/api/v1/import/execution',
+                          headers=headers, json=test_results)
     if r.status_code != 200 and not Settings.XRAY_FAIL_SILENTLY:
         raise XraySubmissionError
-    output = r.json()
-    return output
+    try:
+        output = r.json()
+        return output
+    except JSONDecodeError as e:
+        return None
 
 
 def add_remote_link(issue_id, remote_link, title,

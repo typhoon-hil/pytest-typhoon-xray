@@ -1,6 +1,6 @@
-=============
-pytest-tytest
-=============
+===================
+pytest-typhoon-xray
+===================
 
 .. image:: https://img.shields.io/pypi/v/pytest-typhoon-xray.svg
     :target: https://pypi.org/project/pytest-typhoon-xray
@@ -75,10 +75,16 @@ Or you can store credentials in a file, for example, `/private/secrets`::
 Don't put the variable values in quotes.
 
 If you use a file to store credentials, you should use the `secrets` command
-line parameter:
+line parameter::
 
     pytest --secrets=/private/secrets
 
+If you use an Xray Server+DC installation, rather than Xray Cloud, you must
+specify::
+
+    pytest --server=True
+
+so that the plugin knows which type of Xray deployment is in use.
 
 Test parameters defined in Python modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -156,6 +162,8 @@ pytest invocation now has some additional command line parameters::
                         Ignore Xray communication errors
   --web-url=WEB_URL
                         URL pointing to the Allure report
+  --server=XRAY_SERVER
+                        Flag to indicate that Xray Server+DC is used instead of Xray Cloud
 
 An example of invoking `pytest`::
 
@@ -171,7 +179,7 @@ the coverage at least stays the same before you submit a pull request.
 License
 -------
 
-Distributed under the terms of the `MIT`_ license, "pytest-tytest" is free and open source software
+Distributed under the terms of the `MIT`_ license, "pytest-typhoon-xray" is free and open source software
 
 
 Issues

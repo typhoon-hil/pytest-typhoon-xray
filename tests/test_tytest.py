@@ -21,6 +21,26 @@ def test_xray_markers(testdir):
     assert len(result.errlines) == 0
 
 
+def test_xray_server(testdir):
+    test_example = """
+    import pytest
+
+    pytest_plugins = "pytester"
+
+    @pytest.mark.xray(test_key="XMPL-123")
+    def test_1():
+        pass
+
+    @pytest.mark.xray(test_key="XMPL-124")
+    def test_2():
+        pass
+    """
+    testdir.makepyfile(test_example)
+    result = testdir.runpytest(
+        "--xray-plan-key=XMPL-125 --xray-fail-silently=True --server=True")
+    assert len(result.errlines) == 0
+
+
 def test_parameters(testdir):
     test_config = """
     param1 = range(10)

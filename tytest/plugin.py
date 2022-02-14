@@ -34,6 +34,11 @@ def pytest_addoption(parser):
         '--web-url',
         dest='web_url',
         help='Web link to be added to the test execution report')
+    group.addoption(
+        '--server',
+        dest='server',
+        default='False',
+        help='Indicate the use of Xray Server+DC instead of Xray Cloud')
 
 
 @pytest.fixture
@@ -59,6 +64,11 @@ def xray_fail_silently(request):
 @pytest.fixture
 def web_url(request):
     return request.config.option.web_url
+
+
+@pytest.fixture
+def server(request):
+    return request.config.option.server
 
 
 def pytest_configure(config):
@@ -87,6 +97,7 @@ def pytest_configure(config):
     Settings.XRAY_PLAN_KEY = config.getoption('xray_plan_key')
     Settings.XRAY_FAIL_SILENTLY = bool(config.getoption('xray_fail_silently'))
     Settings.WEB_URL = config.getoption('web_url')
+    Settings.XRAY_SERVER = config.getoption('server')
 
     # initialize secret params
     secrets = config.getoption('secrets')
@@ -109,6 +120,9 @@ def pytest_collection_modifyitems(config, items):
 
 
 def pytest_terminal_summary(terminalreporter):
+    PASSED = 'PASS' if Settings.XRAY_SERVER else 'PASSED'
+    FAILED = 'FAIL' if Settings.XRAY_SERVER else 'FAILED'
+    SKIPPED = 'SKIP' if Settings.XRAY_SERVER else 'SKIPPED'
     Stats.END_TIME = datetime.now()
     result = make_initial_test_result(
         start_time=Stats.START_TIME, end_time=Stats.END_TIME)
@@ -117,19 +131,19 @@ def pytest_terminal_summary(terminalreporter):
     _fill_keys(terminalreporter.stats, 'skipped')
 
     for key, values in TestExecutionResult.xray_keys.items():
-        test = {'testKey': key, 'status': 'PASSED', 'comment': ''}
+        test = {'testKey': key, 'status': PASSED, 'comment': ''}
         stat_counter = {'passed': 0, 'failed': 0, 'skipped': 0}
         for item in values:
-            if test['status'] == 'PASSED' and item.outcome == 'failed':
-                test['status'] = 'FAILED'
+            if test['status'] == PASSED and item.outcome == 'failed':
+                test['status'] = FAILED
             stat_counter[item.outcome] += 1
             test['comment'] += f'{item.outcome.upper()}: {item.nodeid}\n'
             if item.outcome == 'failed':
                 test['comment'] += str(item.longrepr) + '\n'
         total = len(values)
-        test['comment'] = _stat('PASSED', stat_counter['passed'], total) + \
-            "   " + _stat('FAILED', stat_counter['failed'], total) + \
-            "   " + _stat('SKIPPED', stat_counter['skipped'], total) + "\n" + \
+        test['comment'] = _stat(PASSED, stat_counter['passed'], total) + \
+            "   " + _stat(FAILED, stat_counter['failed'], total) + \
+            "   " + _stat(SKIPPED, stat_counter['skipped'], total) + "\n" + \
             test['comment']
         result['tests'].append(test)
     new_issue = send_test_results(result)

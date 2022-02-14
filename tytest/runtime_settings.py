@@ -17,6 +17,7 @@ class Settings:
     JIRA_AUTH = []
     RUN_CONFIG = ''
     WEB_URL = ''
+    XRAY_SERVER = False
 
 
 class Stats:
