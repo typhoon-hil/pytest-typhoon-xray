@@ -32,10 +32,10 @@ def authenticate_xray():
 def send_test_results(test_results):
     if Settings.XRAY_SERVER:
         headers = {
-            'Authorization': 'Bearer {Settings.JIRA_TOKEN}',
+            'Authorization': f'Bearer {Settings.JIRA_TOKEN}',
             'Content-type': 'application/json'
         }
-        r = requests.post(f'{Settings.XRAY_HOST}/rest/raven/1.0/import/execution',
+        r = requests.post(f'{Settings.JIRA_HOST}/rest/raven/1.0/import/execution',
                           headers=headers, json=test_results)
     else:
         headers = authenticate_xray()
@@ -74,10 +74,10 @@ def add_remote_link(issue_id, remote_link, title,
 def make_initial_test_result(
         start_time=datetime.now(),
         end_time=datetime.now(),
-        summary=f'Execution of plan {Settings.XRAY_PLAN_KEY}'):
+        summary=f'Execution of plan'):
     return {
         'info': {
-            'summary': summary,
+            'summary': f'Test execution of plan {Settings.XRAY_PLAN_KEY}',
             'startDate': to_xray_timestamp(start_time),
             'finishDate': to_xray_timestamp(end_time),
             'testPlanKey': Settings.XRAY_PLAN_KEY,
