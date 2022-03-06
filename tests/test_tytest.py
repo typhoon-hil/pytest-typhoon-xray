@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def test_xray_markers(testdir):
+def xtest_xray_markers(testdir):
     test_example = """
     import pytest
 
@@ -21,7 +21,7 @@ def test_xray_markers(testdir):
     assert len(result.errlines) == 0
 
 
-def test_xray_server(testdir):
+def xtest_xray_server(testdir):
     test_example = """
     import pytest
 
