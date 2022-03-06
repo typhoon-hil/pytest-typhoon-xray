@@ -30,6 +30,8 @@ def authenticate_xray():
 
 
 def send_test_results(test_results):
+    if not Settings.XRAY_SERVER and not Settings.XRAY_PLAN_KEY:
+        return None
     if Settings.XRAY_SERVER:
         headers = {
             'Authorization': f'Bearer {Settings.JIRA_TOKEN}',

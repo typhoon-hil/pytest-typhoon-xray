@@ -95,9 +95,9 @@ def pytest_configure(config):
         'xray(test_key): Issue key of the test in Xray')
 
     Settings.XRAY_PLAN_KEY = config.getoption('xray_plan_key')
-    Settings.XRAY_FAIL_SILENTLY = bool(config.getoption('xray_fail_silently'))
+    Settings.XRAY_FAIL_SILENTLY = config.getoption('xray_fail_silently') == 'True'
     Settings.WEB_URL = config.getoption('web_url')
-    Settings.XRAY_SERVER = config.getoption('server')
+    Settings.XRAY_SERVER = config.getoption('server') == 'True'
 
     # initialize secret params
     secrets = config.getoption('secrets')
@@ -147,7 +147,7 @@ def pytest_terminal_summary(terminalreporter):
             test['comment']
         result['tests'].append(test)
     new_issue = send_test_results(result)
-    if Settings.WEB_URL:
+    if Settings.WEB_URL and new_issue is not None:
         add_remote_link(new_issue['id'], Settings.WEB_URL, 'Web report')
 
 
