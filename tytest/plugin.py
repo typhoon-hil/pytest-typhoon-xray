@@ -95,7 +95,8 @@ def pytest_configure(config):
         'xray(test_key): Issue key of the test in Xray')
 
     Settings.XRAY_PLAN_KEY = config.getoption('xray_plan_key')
-    Settings.XRAY_FAIL_SILENTLY = config.getoption('xray_fail_silently') == 'True'
+    Settings.XRAY_FAIL_SILENTLY = \
+        config.getoption('xray_fail_silently') == 'True'
     Settings.WEB_URL = config.getoption('web_url')
     Settings.XRAY_SERVER = config.getoption('server') == 'True'
 
