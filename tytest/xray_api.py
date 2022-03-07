@@ -53,7 +53,7 @@ def send_test_results(test_results):
 
 
 def add_remote_link(issue_id, remote_link, title,
-                    icon_url='http://allure.qatools.ru/img/favicon.ico'):
+                    icon_url='https://qameta.io/allure-report/img/reportlogo.svg'):
     req = {
         'object': {
             'url': remote_link,
@@ -64,10 +64,24 @@ def add_remote_link(issue_id, remote_link, title,
             }
         }
     }
-    r = requests.post(
-        f'{Settings.JIRA_HOST}/rest/api/2/issue/{issue_id}/remotelink',
-        auth=Settings.JIRA_AUTH, json=req)
-    if r.status_code != 200 and not Settings.XRAY_FAIL_SILENTLY:
+    print(req)
+    if not Settings.XRAY_SERVER and not Settings.XRAY_PLAN_KEY:
+        return None
+    if Settings.XRAY_SERVER:
+        headers = {
+            'Authorization': f'Bearer {Settings.JIRA_TOKEN}',
+            'Content-type': 'application/json'
+        }
+        r = requests.post(
+            f'{Settings.JIRA_HOST}/rest/api/2/issue/{issue_id}/remotelink',
+            headers=headers, json=req)
+    else:
+        r = requests.post(
+            f'{Settings.JIRA_HOST}/rest/api/2/issue/{issue_id}/remotelink',
+            auth=Settings.JIRA_AUTH, json=req)
+    print(r.status_code, r.content)
+    OK_CODES = range(200, 205)
+    if r.status_code not in OK_CODES and not Settings.XRAY_FAIL_SILENTLY:
         raise JiraError
     output = r.json()
     return output

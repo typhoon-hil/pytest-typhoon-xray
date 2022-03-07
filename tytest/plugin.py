@@ -148,8 +148,11 @@ def pytest_terminal_summary(terminalreporter):
             test['comment']
         result['tests'].append(test)
     new_issue = send_test_results(result)
+    print(new_issue)
     if Settings.WEB_URL and new_issue is not None:
-        add_remote_link(new_issue['id'], Settings.WEB_URL, 'Web report')
+        issue_id = new_issue['testExecIssue']['id'] \
+            if Settings.XRAY_SERVER else new_issue['id']
+        add_remote_link(issue_id, Settings.WEB_URL, 'Web report')
 
 
 def pytest_sessionfinish(session):
