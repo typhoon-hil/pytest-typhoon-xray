@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest-typhoon-xray',
-    version='0.4.4',
+    version='0.4.5',
     author='Branko Milosavljevic',
     author_email='branko@typhoon-hil.com',
     maintainer='Branko Milosavljevic',
