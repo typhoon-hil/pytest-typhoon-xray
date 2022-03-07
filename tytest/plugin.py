@@ -148,7 +148,6 @@ def pytest_terminal_summary(terminalreporter):
             test['comment']
         result['tests'].append(test)
     new_issue = send_test_results(result)
-    print(new_issue)
     if Settings.WEB_URL and new_issue is not None:
         issue_id = new_issue['testExecIssue']['id'] \
             if Settings.XRAY_SERVER else new_issue['id']

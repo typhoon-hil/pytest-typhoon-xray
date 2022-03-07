@@ -64,7 +64,6 @@ def add_remote_link(issue_id, remote_link, title,
             }
         }
     }
-    print(req)
     if not Settings.XRAY_SERVER and not Settings.XRAY_PLAN_KEY:
         return None
     if Settings.XRAY_SERVER:
@@ -79,7 +78,6 @@ def add_remote_link(issue_id, remote_link, title,
         r = requests.post(
             f'{Settings.JIRA_HOST}/rest/api/2/issue/{issue_id}/remotelink',
             auth=Settings.JIRA_AUTH, json=req)
-    print(r.status_code, r.content)
     OK_CODES = range(200, 205)
     if r.status_code not in OK_CODES and not Settings.XRAY_FAIL_SILENTLY:
         raise JiraError
