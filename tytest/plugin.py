@@ -147,6 +147,8 @@ def pytest_terminal_summary(terminalreporter):
             "   " + _stat(SKIPPED, stat_counter['skipped'], total) + "\n" + \
             test['comment']
         result['tests'].append(test)
+    if len(result['tests']) == 0:
+        return
     new_issue = send_test_results(result)
     if Settings.WEB_URL and new_issue is not None:
         issue_id = new_issue['testExecIssue']['id'] \
