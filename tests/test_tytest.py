@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 
 
 def xtest_xray_markers(testdir):
@@ -61,4 +62,28 @@ def test_parameters(testdir):
     testdir.makepyfile(runconfig=test_config)
     testdir.makepyfile(test_example)
     result = testdir.runpytest("--runconfig", "runconfig.py")
+    assert len(result.errlines) == 0
+
+
+def test_xray_communication(testdir):
+    secrets_file = os.path.join(os.path.dirname(os.path.dirname(
+        os.path.realpath(__file__))), 'secrets')
+    if not os.path.exists(secrets_file):
+        return
+    with open(secrets_file, 'r') as infile:
+        secrets = infile.read()
+    test_secrets_file = testdir.makefile('.ini', secrets)
+    test_example = """
+    import pytest
+
+    pytest_plugins = "pytester"
+
+    @pytest.mark.xray(test_key="DEMO-4")
+    def test_always_pass():
+        assert True
+    """
+    testdir.makepyfile(test_example)
+    result = testdir.runpytest(
+        "--xray-plan-key", "DEMO-8",
+        "--secrets", str(test_secrets_file))
     assert len(result.errlines) == 0
