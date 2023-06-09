@@ -4,6 +4,7 @@ from datetime import datetime
 from json import JSONDecodeError
 
 import requests
+from requests.auth import HTTPBasicAuth
 from tzlocal import get_localzone
 from .runtime_settings import Settings
 from .exceptions import XrayAuthError, XraySubmissionError, JiraError
@@ -33,12 +34,9 @@ def send_test_results(test_results):
     if not Settings.XRAY_SERVER and not Settings.XRAY_PLAN_KEY:
         return None
     if Settings.XRAY_SERVER:
-        headers = {
-            'Authorization': f'Bearer {Settings.JIRA_TOKEN}',
-            'Content-type': 'application/json'
-        }
+        basic = HTTPBasicAuth(Settings.JIRA_USER, Settings.JIRA_TOKEN)
         r = requests.post(f'{Settings.JIRA_HOST}/rest/raven/1.0/import/execution',
-                          headers=headers, json=test_results)
+                          auth=basic, json=test_results)
     else:
         headers = authenticate_xray()
         r = requests.post(f'{Settings.XRAY_HOST}/api/v1/import/execution',
