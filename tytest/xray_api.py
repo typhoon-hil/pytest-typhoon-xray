@@ -51,7 +51,7 @@ def send_test_results(test_results):
 
 
 def add_remote_link(issue_id, remote_link, title,
-                    icon_url='https://qameta.io/allure-report/img/reportlogo.svg'):
+                    icon_url='https://images.opencollective.com/allure-report/a3f97da/logo/256.png'):
     req = {
         'object': {
             'url': remote_link,
@@ -65,13 +65,10 @@ def add_remote_link(issue_id, remote_link, title,
     if not Settings.XRAY_SERVER and not Settings.XRAY_PLAN_KEY:
         return None
     if Settings.XRAY_SERVER:
-        headers = {
-            'Authorization': f'Bearer {Settings.JIRA_TOKEN}',
-            'Content-type': 'application/json'
-        }
+        basic = HTTPBasicAuth(Settings.JIRA_USER, Settings.JIRA_TOKEN)
         r = requests.post(
             f'{Settings.JIRA_HOST}/rest/api/2/issue/{issue_id}/remotelink',
-            headers=headers, json=req)
+            auth=basic, json=req)
     else:
         r = requests.post(
             f'{Settings.JIRA_HOST}/rest/api/2/issue/{issue_id}/remotelink',
